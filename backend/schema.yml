@@ -1,0 +1,157 @@
+openapi: 3.0.3
+info:
+  title: Django Boilerplate API
+  version: 0.1.0
+  description: API Schema for Django Boilerplate Application
+paths:
+  /api/auth/login/:
+    post:
+      operationId: auth_login_create
+      description: |-
+        Handles user authentication and JWT token generation.
+
+        Supports login for different user roles (csr, government, sdgcc, planning, super_admin)
+        with role mapping between frontend and backend roles.
+
+        POST /api/auth/login/
+        Request: {"data": {"email": "user@example.com", "password": "password", "role": "csr"}}
+        Response: JWT tokens with user data
+      tags:
+      - auth
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/auth/logout/:
+    post:
+      operationId: auth_logout_create
+      description: |-
+        Handles user logout.
+
+        Simply returns success response as JWT tokens are stateless.
+        Token invalidation happens on the client side.
+
+        POST /api/auth/logout/
+        Requires: Valid JWT token in Authorization header
+      tags:
+      - auth
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/auth/refresh/:
+    post:
+      operationId: auth_refresh_create
+      description: |-
+        Generates new access token from valid refresh token.
+
+        POST /api/auth/refresh/
+        Request: {"data": {"refresh_token": "refresh_token_string"}}
+        Response: New access token with expiry information
+      tags:
+      - auth
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/auth/register/:
+    post:
+      operationId: auth_register_create
+      description: |-
+        Handles basic user registration.
+
+        Creates User record with basic information.
+
+        POST /api/auth/register/
+        Request: {"data": {"email": "user@example.com", "password": "password", "full_name": "User Name", "contact_number": "+1234567890"}}
+        Response: Created user data
+      tags:
+      - auth
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/auth/whoami/:
+    get:
+      operationId: auth_whoami_retrieve
+      description: |-
+        Returns current authenticated user information.
+
+        GET /api/auth/whoami/
+        Requires: Valid JWT token in Authorization header
+        Response: User data
+      tags:
+      - auth
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/change-password/:
+    post:
+      operationId: change_password_create
+      description: |-
+        Allows authenticated users to change their password.
+
+        Requires current password verification before allowing
+        the password change for security.
+
+        POST /api/change-password/
+        Requires: Valid JWT token in Authorization header
+        Request: {"data": {"old_password": "current", "new_password": "new"}}
+        Response: Success or error message
+      tags:
+      - change-password
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/forgot-password/:
+    post:
+      operationId: forgot_password_create
+      description: |-
+        Initiates password reset process by sending reset email.
+
+        Always returns success response for security reasons, even if
+        the email doesn't exist in the system.
+
+        POST /api/forgot-password/
+        Request: {"data": {"email": "user@example.com"}}
+        Response: Generic success message
+      tags:
+      - forgot-password
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/reset-password/:
+    post:
+      operationId: reset_password_create
+      description: |-
+        Completes password reset using token and uidb64 from email.
+
+        Validates the reset token and updates user password if valid.
+        Tokens have a 15-minute expiry configured in settings.
+
+        POST /api/reset-password/
+        Request: {"data": {"token": "reset_token", "uidb64": "encoded_user_id", "new_password": "newpass"}}
+        Response: Success or error message
+      tags:
+      - reset-password
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+components:
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
