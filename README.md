@@ -21,25 +21,30 @@ Production-ready Django project template with JWT authentication, standardized A
 - Sentry Integration
 
 ### API Features
-- Standardized Responses
-- Automatic Documentation
-- Request Throttling
-- Pagination
-- Custom Exception Handling
+- **Standardized API Responses** - Consistent JSON response format across all endpoints
+- **Global Custom Exception Handlers** - Centralized error handling with proper HTTP status codes
+- **Request Correlation IDs** - GUID-based request tracking for debugging
+- **Automatic API Documentation** - OpenAPI/Swagger integration
+- **Request Throttling** - Rate limiting for API protection
+- **Custom Pagination** - Flexible pagination with metadata
+- **Custom Permissions System** - Role-based access control
 
 ### Development & Deployment
 - Docker Setup
 - Environment Configuration
 - Code Quality Tools
 - Static File Handling
-- Structured Logging
+- **Structured Logging with GUIDs** - Request tracking and error correlation
 
-### Utilities
-- Custom User Model
-- Audit Trail System
-- Email Setup
-- File Upload Handling
-- Data Import/Export
+### Utilities & Architecture
+- **Custom User Model** - Extended user management with roles
+- **Audit Trail System** - Comprehensive action logging
+- **Email Utility with Message Queue** - Celery-based async email processing
+- **BaseModels with Metadata** - Common fields (created_at, updated_at, etc.)
+- **Master Data Base Views** - Generic CRUD operations for reference data
+- **Typical Auth APIs** - Complete authentication endpoints (login, logout, registration, password reset)
+- **File Upload Handling** - Secure file management with validation
+- **Data Import/Export** - Bulk operations support
 
 ## Prerequisites
 
@@ -213,12 +218,40 @@ make docker_createsuperuser # Create Django superuser
 make clean                 # Clean Python cache files
 ```
 
+## Architecture Overview
+
+### API Response System
+- **Standardized Format**: All API responses follow consistent JSON structure with `response`, `message_code`, `message`, and `data` fields
+- **Error Codes**: Numbered error system (1000-1999 success, 2000+ errors) for better API documentation
+- **Global Exception Handler**: Converts all exceptions to standardized responses automatically
+
+### Authentication & Authorization
+- **JWT Tokens**: Access and refresh token system with configurable lifetimes
+- **Custom User Model**: Extended with roles and profile management
+- **Permission System**: Granular permissions with role-based access control
+- **Auth APIs**: Complete set - register, login, logout, refresh token, password reset
+
+### Audit & Logging
+- **Request Correlation IDs**: Every request gets a unique GUID for tracking
+- **Audit Trail**: Tracks all user actions with metadata (who, what, when, from/to status)
+- **Structured Logging**: JSON-formatted logs with correlation IDs for easy debugging
+
+### Data Architecture
+- **BaseModel**: All models inherit common fields (id, created_at, updated_at, etc.)
+- **Master Data Views**: Generic base classes for CRUD operations on reference data
+- **File Management**: Secure upload handling with validation and storage
+
+### Email & Background Tasks
+- **Celery Integration**: Async task processing with Redis/RabbitMQ
+- **Email Queue**: Non-blocking email sending with retry mechanisms
+- **Background Jobs**: Extensible task system for heavy operations
+
 ## Project Structure
 
 ```
 DjangoBoilerplateSetup/
 ├── backend/
-│   ├── DjangoBoilerplateSetup/     # Django project settings
+│   ├── project_name/              # Django project settings
 │   │   ├── settings/               # Environment-specific settings
 │   │   │   ├── base.py            # Common settings
 │   │   │   ├── local.py           # Development settings
@@ -228,13 +261,15 @@ DjangoBoilerplateSetup/
 │   │   └── wsgi.py                # WSGI configuration
 │   ├── apps/
 │   │   ├── common/                # Shared utilities
-│   │   │   ├── api_responses/     # Standardized API responses
+│   │   │   ├── api_responses/     # Standardized API responses & exception handling
 │   │   │   ├── audit/             # Audit trail system
-│   │   │   ├── base_views/        # Base view classes
-│   │   │   ├── email/             # Email utilities
+│   │   │   ├── base_views/        # Base view classes for master data
+│   │   │   ├── email/             # Email utilities with Celery
+│   │   │   ├── permissions.py     # Custom permission classes
 │   │   │   ├── pagination.py      # Custom pagination
+│   │   │   ├── models.py          # BaseModel and common abstractions
 │   │   │   └── utils.py           # Helper functions
-│   │   └── users/                 # User management
+│   │   └── users/                 # User management with auth APIs
 │   ├── templates/                 # Django templates
 │   ├── logs/                      # Application logs
 │   ├── mediafiles/               # User uploaded files
