@@ -314,29 +314,6 @@ make docker_collectstatic
 docker compose exec db pg_dump -U MyNewProject MyNewProject > backup.sql
 ```
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests and linting
-5. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License.
-
-## Support
-
-If you encounter issues:
-
-1. Check the logs: `docker compose logs backend`
-2. Verify environment variables in `.env`
-3. Ensure all services are running: `docker compose ps`
-4. Check the Django admin for user management
-
-## Updates
-
 To update dependencies:
 ```bash
 poetry update
