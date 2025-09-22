@@ -34,7 +34,7 @@ urlpatterns = [
 
     #APPS
     path("api/", include("apps.users.urls")),
-    
+
 ]
 
 # Add debug toolbar URLs when DEBUG is True

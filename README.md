@@ -59,7 +59,7 @@ Create a new Django project using this boilerplate template, replace MyNewProjec
 ```bash
 django-admin startproject MyNewProject \
   --extension py,json,yml,yaml,toml \
-  --name Dockerfile,README.md,.env.example,.gitignore,Makefile \
+  --name Dockerfile,README.md,.env.example,.gitignore,Makefile,docker-compose.yml,.env \
   --template=https://github.com/saksham-shil/Django-Boilerplate-Setup/archive/refs/heads/main.zip
 ```
 
@@ -68,7 +68,7 @@ django-admin startproject MyNewProject \
 # If you have cloned this repository locally
 django-admin startproject MyNewProject \
   --extension py,json,yml,yaml,toml \
-  --name Dockerfile,README.md,.env.example,.gitignore,Makefile \
+  --name Dockerfile,README.md,.env.example,.gitignore,Makefile,docker-compose.yml,.env \
   --template=/path/to/DjangoBoilerplateSetup
 ```
 

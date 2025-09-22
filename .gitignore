@@ -28,7 +28,7 @@ npm-debug.log
 *.map
 
 # General
-/CSRMatchmaking-venv/
+/{{ project_name }}-venv/
 /venv/
 /env/
 /output/

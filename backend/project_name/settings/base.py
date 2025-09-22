@@ -61,7 +61,7 @@ LOCAL_APPS = [
     "apps.common",
     "apps.common.audit",
     "apps.users",
-] 
+]
 
 INSTALLED_APPS = PRE_INSTALLED_APPS + EXTERNAL_APPS + LOCAL_APPS
 
@@ -80,7 +80,7 @@ MIDDLEWARE = [
     "csp.middleware.CSPMiddleware",
     "defender.middleware.FailedLoginMiddleware",
     "django_guid.middleware.guid_middleware",
-    "{{ project_name }}.middleware.LoggingMiddleware"
+    "{{ project_name }}.middleware.LoggingMiddleware",
 ]
 
 # Only add debug toolbar middleware when DEBUG is True
