@@ -3,7 +3,7 @@ services:
     image: "postgres:alpine"
     environment:
       - POSTGRES_USER={{ project_name }}
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
       - POSTGRES_DB={{ project_name }}
     ports:
       - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
