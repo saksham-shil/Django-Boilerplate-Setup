@@ -136,3 +136,13 @@ def get_message(message_code):
 def is_success_code(message_code):
     """Check if message code represents success."""
     return 1000 <= message_code < 2000
+
+
+# File upload constants (for file_validators.py)
+MAX_DOCUMENT_SIZE = 20 * 1024 * 1024  # 20MB
+MAX_IMAGE_SIZE = 10 * 1024 * 1024     # 10MB
+MAX_FILES_PER_UPLOAD = 10
+
+# Human readable (for error messages)
+MAX_DOCUMENT_SIZE_MB = MAX_DOCUMENT_SIZE / 1024 / 1024
+MAX_IMAGE_SIZE_MB = MAX_IMAGE_SIZE / 1024 / 1024

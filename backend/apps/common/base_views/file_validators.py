@@ -14,9 +14,7 @@ from apps.common.api_responses.exception_handler import APIError
 from apps.common.api_responses.constants import (
     ERROR_INVALID_FILE_FORMAT,
     ERROR_FILE_SIZE_TOO_LARGE,
-    ERROR_INPUT
-)
-from apps.projects.project.constants import (
+    ERROR_INPUT,
     MAX_DOCUMENT_SIZE,
     MAX_IMAGE_SIZE,
     MAX_DOCUMENT_SIZE_MB,

@@ -44,6 +44,7 @@ Production-ready Django project template with JWT authentication, standardized A
 - **Master Data Base Views** - Generic CRUD operations for reference data
 - **Typical Auth APIs** - Complete authentication endpoints (login, logout, registration, password reset)
 - **File Upload Handling** - Secure file management with validation
+- **Common Filtering Utilities** - Reusable search, filter, and sort functions for list views
 - **Data Import/Export** - Bulk operations support
 
 ## Prerequisites
@@ -148,7 +149,8 @@ SECRET_KEY=your-generated-secret-key-here
 DATABASE_URL=postgres://YourProjectName:password@db:5432/YourProjectName
 
 # Redis & Celery
-REDIS_URL=redis://result:6379/0
+REDIS_PASSWORD=your_redis_password_here
+REDIS_URL=redis://:${REDIS_PASSWORD}@result:6379/0
 CELERY_BROKER_URL=amqp://broker:5672//
 
 # Security
@@ -213,9 +215,10 @@ make test                  # Run tests locally with Poetry
 
 ### Maintenance
 ```bash
-make docker_collectstatic  # Collect static files
+make docker_collectstatic   # Collect static files
 make docker_createsuperuser # Create Django superuser
-make clean                 # Clean Python cache files
+make docker_startapp myapp  # Create new Django app in apps/ directory
+make clean                  # Clean Python cache files
 ```
 
 ## Architecture Overview
@@ -265,10 +268,11 @@ DjangoBoilerplateSetup/
 │   │   │   ├── audit/             # Audit trail system
 │   │   │   ├── base_views/        # Base view classes for master data
 │   │   │   ├── email/             # Email utilities with Celery
+│   │   │   ├── filters.py         # Common filtering utilities
 │   │   │   ├── permissions.py     # Custom permission classes
 │   │   │   ├── pagination.py      # Custom pagination
 │   │   │   ├── models.py          # BaseModel and common abstractions
-│   │   │   └── utils.py           # Helper functions
+│   │   │   └── utils/             # Helper functions (media, number utils)
 │   │   └── users/                 # User management with auth APIs
 │   ├── templates/                 # Django templates
 │   ├── logs/                      # Application logs

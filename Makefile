@@ -1,6 +1,10 @@
 SHELL := /bin/bash # Use bash syntax
 ARG := $(word 2, $(MAKECMDGOALS) )
 
+# Catch all targets to prevent "No rule to make target" errors
+%:
+	@:
+
 clean:
 	@find . -name "*.pyc" -exec rm -rf {} \;
 	@find . -name "__pycache__" -delete
@@ -77,3 +81,11 @@ docker_shell:
 
 docker_setup_permissions:
 	docker compose run --rm backend python manage.py setup_groups_permissions
+
+# i18n support (if enabled)
+docker_compilemessages:
+	docker compose run --rm backend python manage.py compilemessages
+
+# Convenience command for creating new apps
+docker_startapp:
+	docker compose run --rm backend python manage.py startapp $(ARG) apps/$(ARG)

@@ -1,6 +1,7 @@
 """
 Number utilities for formatting and rounding operations.
 """
+from decimal import Decimal
 
 
 def round_decimal_values(data):
@@ -17,7 +18,7 @@ def round_decimal_values(data):
         return {key: round_decimal_values(value) for key, value in data.items()}
     elif isinstance(data, list):
         return [round_decimal_values(item) for item in data]
-    elif isinstance(data, float):
-        return round(data)
+    elif isinstance(data, (float, Decimal)):
+        return round(float(data))
     else:
         return data

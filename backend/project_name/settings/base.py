@@ -1,4 +1,5 @@
 import os
+import sys
 
 from decouple import config, Csv
 from dj_database_url import parse as db_url
@@ -53,8 +54,9 @@ EXTERNAL_APPS = [
 'corsheaders',
 ]
 
-# Only add debug toolbar when DEBUG is True
-if DEBUG:
+# Only add debug toolbar when DEBUG is True and not running tests
+RUNNING_TESTS = 'test' in sys.argv
+if DEBUG and not RUNNING_TESTS:
     EXTERNAL_APPS.append('debug_toolbar')
 
 LOCAL_APPS = [
@@ -83,8 +85,8 @@ MIDDLEWARE = [
     "{{ project_name }}.middleware.LoggingMiddleware",
 ]
 
-# Only add debug toolbar middleware when DEBUG is True
-if DEBUG:
+# Only add debug toolbar middleware when DEBUG is True and not running tests
+if DEBUG and not RUNNING_TESTS:
     MIDDLEWARE.insert(2, 'debug_toolbar.middleware.DebugToolbarMiddleware')
 CORS_ALLOW_CREDENTIALS = True
 
@@ -117,6 +119,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "apps.common.context_processors.sentry_dsn",
                 "apps.common.context_processors.commit_sha",
+                "apps.common.context_processors.frontend_domain",
             ],
             "loaders": [
                 (
@@ -199,6 +202,13 @@ USE_TZ = True
 # ]
 # STATIC_ROOT = BASE_DIR / "staticfiles"   # for collectstatic in production
 
+
+# Redis Configuration with Authentication
+REDIS_PASSWORD = config("REDIS_PASSWORD", default="")
+if REDIS_PASSWORD:
+    REDIS_URL = f"redis://:{REDIS_PASSWORD}@result:6379/0"
+else:
+    REDIS_URL = config("REDIS_URL", default="redis://result:6379/0")
 
 # Celery
 # Recommended settings for reliability: https://gist.github.com/fjsj/da41321ac96cf28a96235cb20e7236f6
@@ -304,7 +314,7 @@ CSP_IMG_SRC = [
 DEFENDER_LOGIN_FAILURE_LIMIT = config('DEFENDER_LOGIN_FAILURE_LIMIT', default=3, cast=int)
 DEFENDER_COOLOFF_TIME = config('DEFENDER_COOLOFF_TIME', default=300, cast=int)  # seconds
 DEFENDER_LOCKOUT_TEMPLATE = "defender/lockout.html"
-DEFENDER_REDIS_URL = config("REDIS_URL")
+DEFENDER_REDIS_URL = REDIS_URL
 
 
 LOGGING = {
