@@ -27,16 +27,17 @@ class LoggingMiddleware(MiddlewareMixin):
         """
         # Store request start time
         request._logging_start_time = time.time()
-        
+
         # Store correlation ID for consistent use across request lifecycle
         try:
             request._correlation_id = get_guid() or 'unknown'
         except Exception:
             request._correlation_id = 'unknown'
-        
-        # Log the incoming request
-        self._log_request(request)
-        
+
+        # Store request data for later logging (after authentication)
+        # Don't log here because JWT authentication hasn't happened yet
+        request._should_log_request = True
+
         return None
     
     def process_response(self, request, response):
@@ -48,10 +49,15 @@ class LoggingMiddleware(MiddlewareMixin):
             response_time = (time.time() - request._logging_start_time) * 1000
         else:
             response_time = 0
-            
+
+        # Log the request now (after JWT authentication has happened)
+        if hasattr(request, '_should_log_request') and request._should_log_request:
+            self._log_request(request)
+            request._should_log_request = False
+
         # Log the response
         self._log_response(request, response, response_time)
-        
+
         return response
     
     def process_exception(self, request, exception):
