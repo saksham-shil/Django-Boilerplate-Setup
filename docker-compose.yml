@@ -6,19 +6,21 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB={{ project_name }}
     ports:
-      - "127.0.0.1:5432:5432"
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
     volumes:
       - dbdata:/var/lib/postgresql/data:delegated
     restart: unless-stopped
 
   broker:
     image: "rabbitmq:alpine"
+    ports:
+      - "127.0.0.1:${RABBITMQ_PORT:-5672}:5672"
     restart: unless-stopped
 
   result:
     image: "redis:alpine"
     ports:
-      - "127.0.0.1:6379:6379"
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
     command: redis-server --requirepass ${REDIS_PASSWORD:-your_redis_password_here}
     restart: unless-stopped
 
@@ -27,7 +29,7 @@ services:
       dockerfile: backend/Dockerfile
       context: .
     ports:
-      - "8000:8000"
+      - "${BACKEND_PORT:-8000}:8000"
     volumes:
       - ./:/home/user/app/
     env_file: backend/.env
