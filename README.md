@@ -101,7 +101,7 @@ cp backend/.env.example backend/.env
 ```bash
 make docker_setup
 docker compose up -d
-make docker_migrate
+make docker_fullmigrate
 make docker_createsuperuser
 ```
 

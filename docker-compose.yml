@@ -9,12 +9,14 @@ services:
       - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
     volumes:
       - dbdata:/var/lib/postgresql/data:delegated
+    env_file: backend/.env
     restart: unless-stopped
 
   broker:
     image: "rabbitmq:alpine"
     ports:
       - "127.0.0.1:${RABBITMQ_PORT:-5672}:5672"
+    env_file: backend/.env
     restart: unless-stopped
 
   result:
@@ -22,6 +24,7 @@ services:
     ports:
       - "127.0.0.1:${REDIS_PORT:-6379}:6379"
     command: redis-server --requirepass ${REDIS_PASSWORD:-your_redis_password_here}
+    env_file: backend/.env
     restart: unless-stopped
 
   backend:

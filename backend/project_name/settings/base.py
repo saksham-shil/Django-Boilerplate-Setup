@@ -316,6 +316,9 @@ DEFENDER_COOLOFF_TIME = config('DEFENDER_COOLOFF_TIME', default=300, cast=int)  
 DEFENDER_LOCKOUT_TEMPLATE = "defender/lockout.html"
 DEFENDER_REDIS_URL = REDIS_URL
 
+# Ensure logs directory exists
+LOGS_DIR = base_dir_join("logs")
+os.makedirs(LOGS_DIR, exist_ok=True)
 
 LOGGING = {
     "version": 1,
